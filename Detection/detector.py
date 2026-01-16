@@ -19,8 +19,31 @@ marker_length = 0.06
 
 cap = cv2.VideoCapture(0)
 if not cap.isOpened():
-    print("Camera erroe")
+    print("Camera error")
     exit()
+
+def draw_cube(frame, rvec, tvec, size = marker_length):
+    half = size / 2
+    pts = np.float32([
+        [-half, -half, 0],
+        [ half, -half, 0],
+        [ half,  half, 0],
+        [-half,  half, 0],
+        [-half, -half, size],
+        [ half, -half, size],
+        [ half,  half, size],
+        [-half,  half, size]
+    ])
+
+    imgpts, _ = cv2.projectPoints(pts, rvec, tvec, cameraMatrix, distCoeffs)
+    imgpts = np.int32(imgpts).reshape(-1,2)
+
+    frame = cv2.drawContours(frame, [imgpts[:4]], -1, (0,255,0), 2)
+    frame = cv2.drawContours(frame, [imgpts[4:]], -1, (0,0,255), 2)
+
+    for i in range(4):
+        frame = cv2.line(frame, tuple(imgpts[i]), tuple(imgpts[i+4]), (255,0,0), 2)
+    return frame
 
 while True:
     ret, frame = cap.read()
@@ -38,8 +61,12 @@ while True:
             corners, marker_length, cameraMatrix, distCoeffs
         )
 
-        for rvec, tvec in zip(rvecs, tvecs):
+        for i, (rvec, tvec) in enumerate(zip(rvecs, tvecs)):
+            marker_id = ids[i][0]
             cv2.drawFrameAxes(frame, cameraMatrix, distCoeffs, rvec, tvec, 0.03)
+
+            if marker_id == 0:
+                frame = draw_cube(frame, rvec, tvec, size=0.03)
 
     cv2.imshow("ArUco AR Test", frame)
 
