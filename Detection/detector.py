@@ -46,8 +46,8 @@ def draw_cube(frame, rvec, tvec, size = marker_length):
     return frame
 
 while True:
-    ret, frame = cap.read()
-    if not ret:
+    work, frame = cap.read()
+    if not work:
         break
 
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -63,10 +63,10 @@ while True:
 
         for i, (rvec, tvec) in enumerate(zip(rvecs, tvecs)):
             marker_id = ids[i][0]
-            cv2.drawFrameAxes(frame, cameraMatrix, distCoeffs, rvec, tvec, 0.03)
+            cv2.drawFrameAxes(frame, cameraMatrix, distCoeffs, rvec, tvec, marker_length/2)
 
             if marker_id == 0:
-                frame = draw_cube(frame, rvec, tvec, size=0.03)
+                frame = draw_cube(frame, rvec, tvec, size=marker_length)
 
     cv2.imshow("ArUco AR Test", frame)
 
