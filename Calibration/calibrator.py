@@ -13,7 +13,7 @@ objp = objp * square_size
 objpoints = []
 imgpoints = [] 
 
-images = glob.glob('calibration_images/*.jpg')
+images = glob.glob('CalibrationImages/*.jpg')
 
 for fname in images:
     img = cv2.imread(fname)

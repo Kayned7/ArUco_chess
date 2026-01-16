@@ -19,7 +19,7 @@ marker_length = 0.06
 
 cap = cv2.VideoCapture(0)
 if not cap.isOpened():
-    print("Nie udało się otworzyć kamery")
+    print("Camera erroe")
     exit()
 
 while True:
