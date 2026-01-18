@@ -2,16 +2,16 @@ import cv2
 import numpy as np
 
 # Jeśli zrobiłeś kalibrację
-cameraMatrix = np.load('Calibration/camera_matrix.npy')
-distCoeffs = np.load('Calibration/dist_coeffs.npy')
+# cameraMatrix = np.load('Calibration/camera_matrix.npy')
+# distCoeffs = np.load('Calibration/dist_coeffs.npy')
 
 # Bieda wersja bez kalibracji
 
-""" cameraMatrix = np.array([[800, 0, 320],
+cameraMatrix = np.array([[800, 0, 320],
                          [0, 800, 240],
                          [0, 0, 1]], dtype=np.float32)
 
-distCoeffs = np.zeros((5,1), dtype=np.float32) """ 
+distCoeffs = np.zeros((5,1), dtype=np.float32)
 
 
 aruco_dict = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_4X4_100)
@@ -70,7 +70,30 @@ while True:
 
             if marker_id == 0:
                 frame = draw_cube(frame, rvec, tvec, size=marker_length)
+            
 
+            # marker to camera distance
+            distance_to_camera = np.linalg.norm(tvec[0])
+            cv2.putText(frame,
+                        f"ID {ids[i][0]} Dist: {distance_to_camera:.2f} m",
+                        (10, 30 + i*30),
+                        cv2.FONT_HERSHEY_SIMPLEX,
+                        0.7, (0, 255, 0), 2)
+
+        for rvec, tvec in zip(rvecs, tvecs):
+            cv2.drawFrameAxes(frame, cameraMatrix, distCoeffs, rvec, tvec, 0.03)  # 3 cm osie
+
+        # distance between markers
+        if len(tvecs) >= 2:
+            pos1 = tvecs[0][0]  # [X, Y, Z] marker 1
+            pos2 = tvecs[1][0]  # marker 2
+
+            dx, dy, dz = pos2 - pos1
+            distance = np.sqrt(dx**2 + dy**2 + dz**2)
+
+            cv2.putText(frame, f"Distance: {distance:.3f} m",
+                        (10, 30), cv2.FONT_HERSHEY_SIMPLEX,
+                        1, (0, 0, 255), 2)
     cv2.imshow("ArUco AR Test", frame)
 
     key = cv2.waitKey(1) & 0xFF

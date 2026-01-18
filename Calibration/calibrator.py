@@ -3,8 +3,8 @@ import numpy as np
 import os
 import glob
 
-CHECKERBOARD = (9, 6)          
-SQUARE_SIZE = 0.01           
+CHECKERBOARD = (9, 6)
+SQUARE_SIZE = 0.01
 
 criteria = (
     cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER,
