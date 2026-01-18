@@ -6,13 +6,13 @@ cameraMatrix = np.load('Calibration/camera_matrix.npy')
 distCoeffs = np.load('Calibration/dist_coeffs.npy')
 
 # Bieda wersja bez kalibracji
-""" 
-cameraMatrix = np.array([[800, 0, 320],
+
+""" cameraMatrix = np.array([[800, 0, 320],
                          [0, 800, 240],
                          [0, 0, 1]], dtype=np.float32)
 
-distCoeffs = np.zeros((5,1), dtype=np.float32) 
-"""
+distCoeffs = np.zeros((5,1), dtype=np.float32) """ 
+
 
 aruco_dict = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_4X4_100)
 parameters = cv2.aruco.DetectorParameters()

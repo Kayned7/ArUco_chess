@@ -4,7 +4,7 @@ import os
 import glob
 
 CHECKERBOARD = (9, 6)          
-SQUARE_SIZE = 0.02             
+SQUARE_SIZE = 0.01           
 
 criteria = (
     cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER,
@@ -112,5 +112,10 @@ print("RMS error (OK<0.5):", ret)
 print("Camera matrix:\n", cameraMatrix)
 print("Distortion coefficients:\n", distCoeffs)
 
-np.save("camera_matrix.npy", cameraMatrix)
-np.save("dist_coeffs.npy", distCoeffs)
+
+OUT_DIR = os.path.dirname(os.path.abspath(__file__))
+print("Saving to:", os.path.join(OUT_DIR, "camera_matrix.npy"))
+
+np.save(os.path.join(OUT_DIR, "camera_matrix.npy"), cameraMatrix)
+np.save(os.path.join(OUT_DIR, "dist_coeffs.npy"), distCoeffs)
+
