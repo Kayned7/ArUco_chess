@@ -2,16 +2,15 @@ import cv2
 import numpy as np
 
 # Jeśli zrobiłeś kalibrację
-# cameraMatrix = np.load('Calibration/camera_matrix.npy')
-# distCoeffs = np.load('Calibration/dist_coeffs.npy')
+cameraMatrix = np.load('Calibration/camera_matrix.npy')
+distCoeffs = np.load('Calibration/dist_coeffs.npy')
 
 # Bieda wersja bez kalibracji
-
-cameraMatrix = np.array([[800, 0, 320],
+""" cameraMatrix = np.array([[800, 0, 320],
                          [0, 800, 240],
                          [0, 0, 1]], dtype=np.float32)
 
-distCoeffs = np.zeros((5,1), dtype=np.float32)
+distCoeffs = np.zeros((5,1), dtype=np.float32) """
 
 
 aruco_dict = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_4X4_100)
@@ -54,6 +53,9 @@ while True:
         break
 
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    h, w = frame.shape[:2]
+    x = 10          
+    y = h - 10          
 
     corners, ids, _ = detector.detectMarkers(gray)
 
@@ -84,7 +86,7 @@ while True:
             cv2.drawFrameAxes(frame, cameraMatrix, distCoeffs, rvec, tvec, 0.03)  # 3 cm osie
 
         # distance between markers
-        if len(tvecs) >= 2:
+        if len(tvecs) == 2:
             pos1 = tvecs[0][0]  # [X, Y, Z] marker 1
             pos2 = tvecs[1][0]  # marker 2
 
@@ -92,8 +94,9 @@ while True:
             distance = np.sqrt(dx**2 + dy**2 + dz**2)
 
             cv2.putText(frame, f"Distance: {distance:.3f} m",
-                        (10, 30), cv2.FONT_HERSHEY_SIMPLEX,
-                        1, (0, 0, 255), 2)
+            (x, y), cv2.FONT_HERSHEY_SIMPLEX,
+            1, (0, 0, 255), 2)
+
     cv2.imshow("ArUco AR Test", frame)
 
     key = cv2.waitKey(1) & 0xFF
