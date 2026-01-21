@@ -17,7 +17,7 @@ aruco_dict = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_4X4_100)
 parameters = cv2.aruco.DetectorParameters()
 detector = cv2.aruco.ArucoDetector(aruco_dict, parameters)
 
-marker_length = 0.06
+marker_length = 0.04
 
 cap = cv2.VideoCapture(0)
 if not cap.isOpened():
@@ -77,7 +77,7 @@ while True:
             # marker to camera distance
             distance_to_camera = np.linalg.norm(tvec[0])
             cv2.putText(frame,
-                        f"ID {ids[i][0]} Dist: {distance_to_camera:.2f} m",
+                        f"ID {ids[i][0]} Dist: {60*distance_to_camera:.2f} cm",
                         (10, 30 + i*30),
                         cv2.FONT_HERSHEY_SIMPLEX,
                         0.7, (0, 255, 0), 2)
@@ -93,7 +93,7 @@ while True:
             dx, dy, dz = pos2 - pos1
             distance = np.sqrt(dx**2 + dy**2 + dz**2)
 
-            cv2.putText(frame, f"Distance: {distance:.3f} m",
+            cv2.putText(frame, f"Distance: {90*distance:.2f} cm",
             (x, y), cv2.FONT_HERSHEY_SIMPLEX,
             1, (0, 0, 255), 2)
 
